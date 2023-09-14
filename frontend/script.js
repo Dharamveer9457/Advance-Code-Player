@@ -125,7 +125,7 @@ async function populateRepositories() {
       const code = urlParams.get('code');
 
         // Make a GET request to your /api/github-repositories endpoint
-        const response = await fetch(`http://localhost:3000/getToken?code=${code}`)
+        const response = await fetch(`https://advance-code-player.onrender.com/getToken?code=${code}`)
 
           if (response.ok) {
             const repositoriesData = await response.json();
@@ -170,7 +170,7 @@ pushCodeButton.addEventListener('click', async () => {
 
     try {
       // Make a POST request to your API endpoint
-      const response = await fetch('http://localhost:3000/push-to-repo', {
+      const response = await fetch('https://advance-code-player.onrender.com/push-to-repo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -193,7 +193,7 @@ pushCodeButton.addEventListener('click', async () => {
     }
   });
 
-// pushCodeButton.addEventListener('click', async () => {
+
 //   const accessToken = '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'; // Replace with your GitHub access token
 //   const owner = 'Dharamveer9457'; 
 //   const repo = 'JS101_Learning_Javascript'; 
