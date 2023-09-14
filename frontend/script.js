@@ -10,8 +10,9 @@ const pushToGithubButton = document.getElementById("pushToGithub");
 const modal = document.getElementById('myModal');
 const closeModal = document.getElementById('closeModal');
 const pushCodeButton = document.getElementById('pushCodeButton');
-const folderInput = document.getElementById('folder');
+const fileNameInput = document.getElementById('fileName');
 const commitMessageInput = document.getElementById('commitMessage');
+const repoNameInput = document.getElementById('repoName')
 
 convertBtn.addEventListener("click",convertCode);
 debugBtn.addEventListener("click", debugCode);
@@ -154,7 +155,7 @@ pushCodeButton.addEventListener('click', async () => {
     const repoName = repoNameInput.value;
     const fileName = fileNameInput.value;
     const commitMessage = commitMessageInput.value;
-    const code = outputRes.innerHTML;
+    const code = outputRes.value;
 
     try {
       // Make a POST request to your API endpoint
