@@ -1,5 +1,3 @@
-const { json } = require("body-parser");
-
 const codeEditor = document.getElementById("editor");
 const convertBtn = document.getElementById("convert");
 const debugBtn = document.getElementById("debug");
