@@ -9,7 +9,7 @@ const repositorySelect = document.getElementById("repository");
 const pushToGithubButton = document.getElementById("pushToGithub");
 const modal = document.getElementById('myModal');
 const closeModal = document.getElementById('closeModal');
-const pushCodeButton = document.getElementById('pushCode');
+const pushCodeButton = document.getElementById('pushCodeButton');
 const folderInput = document.getElementById('folder');
 const commitMessageInput = document.getElementById('commitMessage');
 
