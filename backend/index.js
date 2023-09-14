@@ -3,17 +3,18 @@ const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 3000; 
 const axios = require("axios"); 
-// const { Octokit } = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
+// const { Octokit } = require('github');
 const cors = require("cors");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const session = require('express-session');
 app.use(cors());
 app.use(express.json());
-// app.use(session({
-//   secret: 'code-convertor', // Replace with a strong, random secret
-//   resave: false,
-//   saveUninitialized: true,
-// }));
+app.use(session({
+  secret: 'code-convertor', // Replace with a strong, random secret
+  resave: false,
+  saveUninitialized: true,
+}));
 
 let accessToken = "";
 // Define an endpoint to generate quotes
@@ -125,23 +126,15 @@ app.get('/getToken', async (req, res) => {
 
          accessToken = tokenResponse.data.access_token;
         // console.log(accessToken);
-
+        req.session.accessToken = accessToken;
         // Use the access token to fetch the user's GitHub profile
         const userResponse = await axios.get('https://api.github.com/user', {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         });
-
         const userProfile = userResponse.data;
-
-        // You can now use the user profile data as needed
-        // console.log(userProfile);
-        // req.session.accessToken = accessToken;
-        // Redirect the user to the desired page after successful authentication
-        res.redirect('http://localhost:3000/repositories');
-        // res.json({"accessToken":accessToken})
-        // res.json({"token":accessToken, "msg":"User logged in successfully."});
+       res.redirect('http://localhost:3000/repositories');
     } catch (error) {
         console.error(error);
         res.status(500).send('Error occurred during authentication.');
@@ -150,39 +143,38 @@ app.get('/getToken', async (req, res) => {
 
 
 // Define an endpoint to push code to GitHub
-app.post('/push-to-repo', async (req, res) => {
-  try {
-    // Extract data from the request body
-    const {accessToken, repoName, fileName, commitMessage, code } = req.body;
+// app.post('/push-to-repo', async (req, res) => {
+//   try {
+//     // Extract data from the request body
+//     const {accessToken, repoName, fileName, commitMessage, code } = req.body;
 
-    // Define the GitHub API endpoint for creating a new file
-    const apiUrl = `https://api.github.com/repos/${repoName}/contents/${fileName}`;
+//     // Define the GitHub API endpoint for creating a new file
+//     const apiUrl = `https://api.github.com/repos/${repoName}/contents/${fileName}`;
 
-    // Construct the request payload
-    const requestData = {
-      message: commitMessage,
-      content: Buffer.from(code).toString('base64'), // Convert code to base64
-    };
+//     // Construct the request payload
+//     const requestData = {
+//       message: commitMessage,
+//       content: Buffer.from(code).toString('base64'), // Convert code to base64
+//     };
 
-    // Set the authorization header with the GitHub access token
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
+//     // Set the authorization header with the GitHub access token
+//     const headers = {
+//       Authorization: `Bearer ${accessToken}`,
+//     };
 
-    // Make a PUT request to create or update the file in the repository
-    const response = await axios.put(apiUrl, requestData, { headers });
+//     // Make a PUT request to create or update the file in the repository
+//     const response = await axios.put(apiUrl, requestData, { headers });
 
-    if (response.status === 201) {
-      res.status(201).json({ message: 'File created successfully!' });
-    } else {
-      res.status(response.status).json({ message: 'Failed to create file.' });
-    }
-  } catch (error) {
-    console.error('Error pushing code to repository:', error.message);
-    res.status(500).json({ message: 'Internal server error.' });
-  }
-});
-
+//     if (response.status === 201) {
+//       res.status(201).json({ message: 'File created successfully!' });
+//     } else {
+//       res.status(response.status).json({ message: 'Failed to create file.' });
+//     }
+//   } catch (error) {
+//     console.error('Error pushing code to repository:', error.message);
+//     res.status(500).json({ message: 'Internal server error.' });
+//   }
+// });
 
 app.get('/repositories', async (req, res) => {
 
@@ -208,6 +200,41 @@ app.get('/repositories', async (req, res) => {
     console.error('Error fetching repositories:', error.message);
     res.status(500).send('Error fetching repositories');
   }
+});
+
+app.post("/push-to-repo", async(req,res)=>{
+    try {
+      const access_Token = req.session.accessToken;
+      const userResponse = await axios.get('https://api.github.com/user', {
+      headers: {
+        Authorization: `Bearer ${access_Token}`,
+      },
+    });
+
+    const ownerUsername = userResponse.data.login;
+    const {repo, path, message, content} = req.body;
+    const base64EncodedContent = Buffer.from(content).toString('base64');
+
+    // Create or update the file in the repository
+    const response = await axios({
+      method: 'POST', // Use 'put' to update an existing file, or 'post' to create a new file
+      url: `https://api.github.com/repos/${ownerUsername}/${repo}/contents/${path}`,
+      headers: {
+        Authorization: `Bearer ${access_Token}`,
+      },
+      data: {
+        message: commitMessage,
+        content: base64EncodedContent,
+      },
+    });
+
+    res.json({ message: 'Code pushed to repository successfully' });
+  
+      res.json({ message: 'Code pushed to repository successfully', response });
+    } catch (error) {
+      // console.error(error);
+      res.status(500).json({ error: 'Error pushing code to repository', "msg":error.message });
+    }
 });
 
 app.listen(port, () => {

@@ -154,11 +154,10 @@ async function populateRepositories() {
 
 pushCodeButton.addEventListener('click', async () => {
     // const accessToken = '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'; // Replace with your GitHub access token
-    const repoName = repositorySelect.value;
-    const fileName = fileNameInput.value;
-    const commitMessage = commitMessageInput.value;
-    const code = codeValueInput.innerHTML;
-    // console.log(fileName, repoName, commitMessage, code)
+    const repo = repositorySelect.value;
+    const path = fileNameInput.value;
+    const message = commitMessageInput.value;
+    const content = codeValueInput.innerHTML;
     const access_token = localStorage.getItem('accessToken');
     console.log(access_token)
     const accessToken = access_token
@@ -171,11 +170,10 @@ pushCodeButton.addEventListener('click', async () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          accessToken,
-          repoName,
-          fileName,
-          commitMessage,
-          code
+          repo,
+          path,
+          message,
+          content
         }),
       });
 
