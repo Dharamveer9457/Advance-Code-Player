@@ -151,80 +151,80 @@ async function populateRepositories() {
         }      
 }
 
-// pushCodeButton.addEventListener('click', async () => {
-//     const accessToken = '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'; // Replace with your GitHub access token
-//     const repoName = repoNameInput.value;
-//     const fileName = fileNameInput.value;
-//     const commitMessage = commitMessageInput.value;
-//     const code = codeValueInput.value;
-
-//     console.log(fileName, repoName, commitMessage, code)
-
-//     try {
-//       // Make a POST request to your API endpoint
-//       const response = await fetch('https://advance-code-player.onrender.com/push-to-repo', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           accessToken,
-//           repoName,
-//           fileName,
-//           commitMessage,
-//           code,
-//         }),
-//       });
-
-//       if (response.ok) {
-//         alert('Code pushed to GitHub successfully!');
-//         modal.style.display = 'none';
-//       } else {
-//         const responseData = await response.json();
-//         alert(`Error: ${responseData.message}`);
-//       }
-//     } catch (error) {
-//       console.error('Error pushing code to GitHub:', error.message);
-//       alert('An error occurred while pushing code to GitHub.');
-//     }
-//   });
-
 pushCodeButton.addEventListener('click', async () => {
-  const accessToken = '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'; // Replace with your GitHub access token
-  const owner = 'Dharamveer9457'; 
-  const repo = 'JS101_Learning_Javascript'; 
-  const brandName = 'main'; 
-  const fileName = fileNameInput.value;
-  const commitMessage = commitMessageInput.value;
-  const fileContent = codeValueInput.value;
+    const accessToken = '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'; // Replace with your GitHub access token
+    const repoName = repoNameInput.value;
+    const fileName = fileNameInput.value;
+    const commitMessage = commitMessageInput.value;
+    const code = codeValueInput.value;
 
-  try {
-    // Make a POST request to your updated API endpoint
-    const response = await fetch('https://advance-code-player.onrender.com/push-to-repo', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        accessToken,
-        owner,
-        repo,
-        brandName,
-        fileName,
-        commitMessage,
-        fileContent,
-      }),
-    });
+    console.log(fileName, repoName, commitMessage, code)
 
-    if (response.ok) {
-      alert('Code pushed to GitHub successfully!');
-      modal.style.display = 'none';
-    } else {
-      const responseData = await response.json();
-      alert(`Error: ${responseData.message}`);
+    try {
+      // Make a POST request to your API endpoint
+      const response = await fetch('https://advance-code-player.onrender.com/push-to-repo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken,
+          repoName,
+          fileName,
+          commitMessage,
+          code,
+        }),
+      });
+
+      if (response.ok) {
+        alert('Code pushed to GitHub successfully!');
+        modal.style.display = 'none';
+      } else {
+        const responseData = await response.json();
+        alert(`Error: ${responseData.message}`);
+      }
+    } catch (error) {
+      console.error('Error pushing code to GitHub:', error.message);
+      alert('An error occurred while pushing code to GitHub.');
     }
-  } catch (error) {
-    console.error('Error pushing code to GitHub:', error.message);
-    alert('An error occurred while pushing code to GitHub.');
-  }
-});
+  });
+
+// pushCodeButton.addEventListener('click', async () => {
+//   const accessToken = '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'; // Replace with your GitHub access token
+//   const owner = 'Dharamveer9457'; 
+//   const repo = 'JS101_Learning_Javascript'; 
+//   const brandName = 'main'; 
+//   const fileName = fileNameInput.value;
+//   const commitMessage = commitMessageInput.value;
+//   const fileContent = codeValueInput.value;
+
+//   try {
+//     // Make a POST request to your updated API endpoint
+//     const response = await fetch('https://advance-code-player.onrender.com/push-to-repo', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         accessToken,
+//         owner,
+//         repo,
+//         brandName,
+//         fileName,
+//         commitMessage,
+//         fileContent,
+//       }),
+//     });
+
+//     if (response.ok) {
+//       alert('Code pushed to GitHub successfully!');
+//       modal.style.display = 'none';
+//     } else {
+//       const responseData = await response.json();
+//       alert(`Error: ${responseData.message}`);
+//     }
+//   } catch (error) {
+//     console.error('Error pushing code to GitHub:', error.message);
+//     alert('An error occurred while pushing code to GitHub.');
+//   }
+// });

@@ -3,7 +3,7 @@ const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 3000; 
 const axios = require("axios"); 
-const { Octokit } = require("@octokit/rest");
+// const { Octokit } = require("@octokit/rest");
 const cors = require("cors");
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const session = require('express-session');
@@ -158,98 +158,98 @@ app.get('/auth/github/callback', async (req, res) => {
 
 
 // Define an endpoint to push code to GitHub
-// app.post('/push-to-repo', async (req, res) => {
-//   try {
-//     // Extract data from the request body
-//     const { accessToken, repoName, fileName, commitMessage, code } = req.body;
-
-//     // Define the GitHub API endpoint for creating a new file
-//     const apiUrl = `https://api.github.com/repos/${repoName}/contents/${fileName}`;
-
-//     // Construct the request payload
-//     const requestData = {
-//       message: commitMessage,
-//       content: Buffer.from(code).toString('base64'), // Convert code to base64
-//     };
-
-//     // Set the authorization header with the GitHub access token
-//     const headers = {
-//       Authorization: `Bearer ${accessToken}`,
-//     };
-
-//     // Make a PUT request to create or update the file in the repository
-//     const response = await axios.put(apiUrl, requestData, { headers });
-
-//     if (response.status === 201) {
-//       res.status(201).json({ message: 'File created successfully!' });
-//     } else {
-//       res.status(response.status).json({ message: 'Failed to create file.' });
-//     }
-//   } catch (error) {
-//     console.error('Error pushing code to repository:', error.message);
-//     res.status(500).json({ message: 'Internal server error.' });
-//   }
-// });
-
-
-app.post('/push-to-repo', async(req,res)=>{
-  const { accessToken, brandName, fileContent, fileName, owner, repo, commitMessage } = req.body;
-  const octokit = new Octokit({
-      auth: accessToken,
-  });
-
+app.post('/push-to-repo', async (req, res) => {
   try {
-      // Get the current commit SHA for the default branch
-      const { data: branchData } = await octokit.repos.getBranch({
-          owner,
-          repo,
-          branch: brandName, // Replace with your default branch name
-      });
+    // Extract data from the request body
+    const { accessToken, repoName, fileName, commitMessage, code } = req.body;
 
-      // Get the latest commit on the branch
-      const latestCommitSha = branchData.commit.sha;
+    // Define the GitHub API endpoint for creating a new file
+    const apiUrl = `https://api.github.com/repos/${repoName}/contents/${fileName}`;
 
-      // Get the current tree of the latest commit
-      const { data: treeData } = await octokit.git.getTree({
-          owner,
-          repo,
-          tree_sha: latestCommitSha,
-          recursive: true,
-      });
+    // Construct the request payload
+    const requestData = {
+      message: commitMessage,
+      content: Buffer.from(code).toString('base64'), // Convert code to base64
+    };
 
-      // Find the file if it already exists in the tree
-      const file = treeData.tree.find((item) => item.path === fileName);
+    // Set the authorization header with the GitHub access token
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
 
-      if (file) {
-          // If the file exists, update it
-          await octokit.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path: fileName,
-              message: `${commitMessage}`,
-              content: Buffer.from(fileContent).toString("base64"),
-              sha: file.sha,
-              branch: brandName, // Replace with your default branch name
-          });
-      } else {
-          // If the file doesn't exist, create it
-          await octokit.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path: fileName,
-              message: `${commitMessage}`,
-              content: Buffer.from(fileContent).toString("base64"),
-              branch: brandName, // Replace with your default branch name
-          });
-      }
+    // Make a PUT request to create or update the file in the repository
+    const response = await axios.put(apiUrl, requestData, { headers });
 
-      console.log(`File "${fileName}" created/updated successfully!`);
-      res.json({ isSuccess: true })
+    if (response.status === 201) {
+      res.status(201).json({ message: 'File created successfully!' });
+    } else {
+      res.status(response.status).json({ message: 'Failed to create file.' });
+    }
   } catch (error) {
-      console.error("Error:", error.message);
-      res.status(501).json({ isSuccess: false })
+    console.error('Error pushing code to repository:', error.message);
+    res.status(500).json({ message: 'Internal server error.' });
   }
-})
+});
+
+
+// app.post('/push-to-repo', async(req,res)=>{
+//   const { accessToken, brandName, fileContent, fileName, owner, repo, commitMessage } = req.body;
+//   const octokit = new Octokit({
+//       auth: accessToken,
+//   });
+
+//   try {
+//       // Get the current commit SHA for the default branch
+//       const { data: branchData } = await octokit.repos.getBranch({
+//           owner,
+//           repo,
+//           branch: brandName, // Replace with your default branch name
+//       });
+
+//       // Get the latest commit on the branch
+//       const latestCommitSha = branchData.commit.sha;
+
+//       // Get the current tree of the latest commit
+//       const { data: treeData } = await octokit.git.getTree({
+//           owner,
+//           repo,
+//           tree_sha: latestCommitSha,
+//           recursive: true,
+//       });
+
+//       // Find the file if it already exists in the tree
+//       const file = treeData.tree.find((item) => item.path === fileName);
+
+//       if (file) {
+//           // If the file exists, update it
+//           await octokit.repos.createOrUpdateFileContents({
+//               owner,
+//               repo,
+//               path: fileName,
+//               message: `${commitMessage}`,
+//               content: Buffer.from(fileContent).toString("base64"),
+//               sha: file.sha,
+//               branch: brandName, // Replace with your default branch name
+//           });
+//       } else {
+//           // If the file doesn't exist, create it
+//           await octokit.repos.createOrUpdateFileContents({
+//               owner,
+//               repo,
+//               path: fileName,
+//               message: `${commitMessage}`,
+//               content: Buffer.from(fileContent).toString("base64"),
+//               branch: brandName, // Replace with your default branch name
+//           });
+//       }
+
+//       console.log(`File "${fileName}" created/updated successfully!`);
+//       res.json({ isSuccess: true })
+//   } catch (error) {
+//       console.error("Error:", error.message);
+//       res.status(501).json({ isSuccess: false })
+//   }
+// })
 
 
 app.get('/repositories', async (req, res) => {
