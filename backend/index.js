@@ -5,8 +5,14 @@ const port = process.env.PORT || 3000;
 const axios = require("axios"); 
 const cors = require("cors");
 const { Octokit } = require('@octokit/rest');
+const session = require('express-session');
 app.use(cors());
 app.use(express.json());
+app.use(session({
+  secret: 'code-convertor', // Replace with a strong, random secret
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // Define an endpoint to generate quotes
 app.post('/convert', async (req, res) => {
@@ -87,12 +93,13 @@ app.post('/quality', async (req, res) => {
     }
   })
 
-const callbackUrl = 'https://advance-code-player.vercel.app/';
+const callbackUrl = 'https://advance-code-player-igqis42g8-dharamveer9457.vercel.app/home.html';
 
 app.get('/auth/github', (req, res) => {
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.github_client_ID}&redirect_uri=${callbackUrl}`;
     res.redirect(authUrl);
 });
+
 
 // GitHub callback handler
 app.get('/auth/github/callback', async (req, res) => {
@@ -128,8 +135,9 @@ app.get('/auth/github/callback', async (req, res) => {
 
         // You can now use the user profile data as needed
         console.log(userProfile);
+        req.session.accessToken = accessToken;
         // Redirect the user to the desired page after successful authentication
-        res.redirect('/repositories');
+        res.redirect('http://localhost:3000/repositories');
         // res.json({"token":accessToken, "msg":"User logged in successfully."});
     } catch (error) {
         console.error(error);
@@ -162,6 +170,7 @@ app.post('/push-to-github', async (req, res) => {
 
 app.get('/repositories', async (req, res) => {
   // Check if the user is authenticated (you can use session or token validation here)
+  console.log(req.session)
   if (!req.session.accessToken) {
     return res.status(401).send('Unauthorized');
   }

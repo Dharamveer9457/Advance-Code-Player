@@ -128,7 +128,7 @@ async function populateRepositories() {
       
           if (response.ok) {
             const repositoriesData = await response.json();
-            const repositorySelect = document.getElementById('repository');
+            // const repositorySelect = document.getElementById('repository');
             repositorySelect.innerHTML = ''; // Clear existing options
       
             if (repositoriesData.length === 0) {
