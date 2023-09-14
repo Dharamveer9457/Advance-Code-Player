@@ -153,7 +153,7 @@ app.get('/getToken', async (req, res) => {
 app.post('/push-to-repo', async (req, res) => {
   try {
     // Extract data from the request body
-    const { repoName, fileName, commitMessage, code } = req.body;
+    const {accessToken, repoName, fileName, commitMessage, code } = req.body;
 
     // Define the GitHub API endpoint for creating a new file
     const apiUrl = `https://api.github.com/repos/${repoName}/contents/${fileName}`;
@@ -203,7 +203,7 @@ app.get('/repositories', async (req, res) => {
 
     const repositoriesData = repositoriesResponse.data;
     // console.log(repositoriesData)
-    res.json(repositoriesData);
+    res.json({"accessToken":accessToken ,"data": repositoriesData});
   } catch (error) {
     console.error('Error fetching repositories:', error.message);
     res.status(500).send('Error fetching repositories');

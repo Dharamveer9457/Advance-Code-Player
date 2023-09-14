@@ -1,3 +1,5 @@
+const { json } = require("body-parser");
+
 const codeEditor = document.getElementById("editor");
 const convertBtn = document.getElementById("convert");
 const debugBtn = document.getElementById("debug");
@@ -122,21 +124,22 @@ async function populateRepositories() {
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
-      console.log(code);
 
         // Make a GET request to your /api/github-repositories endpoint
         const response = await fetch(`http://localhost:3000/getToken?code=${code}`)
 
           if (response.ok) {
             const repositoriesData = await response.json();
-            console.log(repositoriesData)
+            let repoData = repositoriesData.data
+            console.log(repositoriesData.data)
+            localStorage.setItem("accessToken",repositoriesData.accessToken)
             // const repositorySelect = document.getElementById('repository');
             repositorySelect.innerHTML = ''; // Clear existing options
       
             if (repositoriesData.length === 0) {
               repositorySelect.innerHTML = '<option value="">No repositories found.</option>';
             } else {
-              repositoriesData.forEach(repo => {
+              repoData.forEach(repo => {
                 const option = document.createElement('option');
                 option.value = repo.name;
                 option.text = repo.name;
@@ -157,7 +160,10 @@ pushCodeButton.addEventListener('click', async () => {
     const fileName = fileNameInput.value;
     const commitMessage = commitMessageInput.value;
     const code = codeValueInput.innerHTML;
-    console.log(fileName, repoName, commitMessage, code)
+    // console.log(fileName, repoName, commitMessage, code)
+    const access_token = localStorage.getItem('accessToken');
+    console.log(access_token)
+    const accessToken = access_token
 
     try {
       // Make a POST request to your API endpoint
@@ -167,7 +173,7 @@ pushCodeButton.addEventListener('click', async () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          // accessToken,
+          accessToken,
           repoName,
           fileName,
           commitMessage,
