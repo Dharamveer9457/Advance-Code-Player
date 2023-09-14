@@ -4,7 +4,6 @@ require('dotenv').config();
 const port = process.env.PORT || 3000; 
 const axios = require("axios"); 
 const cors = require("cors");
-const { Octokit } = require('@octokit/rest');
 const session = require('express-session');
 app.use(cors());
 app.use(express.json());
