@@ -118,33 +118,42 @@ function qualityCheck(){
 
 async function populateRepositories() {
     try {
-        const response = await fetch('https://api.github.com/user/repos', {
+        // Make a GET request to your /api/github-repositories endpoint
+        const response = await fetch('http://localhost:3000/repositories', {
+            method: 'GET',
             headers: {
-                'Authorization': 'Bearer YOUR_ACCESS_TOKEN' // Replace with your access token
-            }
-        });
-
-        if (response.ok) {
-            const repositories = await response.json();
-            repositories.forEach(repo => {
+              Accept: 'application/json',
+            },
+          });
+      
+          if (response.ok) {
+            const repositoriesData = await response.json();
+            const repositorySelect = document.getElementById('repository');
+            repositorySelect.innerHTML = ''; // Clear existing options
+      
+            if (repositoriesData.length === 0) {
+              repositorySelect.innerHTML = '<option value="">No repositories found.</option>';
+            } else {
+              repositoriesData.forEach(repo => {
                 const option = document.createElement('option');
-                option.value = repo.full_name;
-                option.textContent = repo.full_name;
+                option.value = repo.name;
+                option.text = repo.name;
                 repositorySelect.appendChild(option);
-            });
-        } else {
-            console.error('Error fetching repositories.');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
+              });
+            }
+          } else {
+            console.error('Error fetching repositories:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching repositories:', error.message);
+        }      
 }
 
 pushCodeButton.addEventListener('click', async () => {
     // Retrieve input values
     const repository = document.getElementById('repository').value;
-    const filePath = document.getElementById('filePath').value;
-    const content = document.getElementById('content').value;
+    const filePath = folderInput.value;
+    const content = outputRes.value;
 
     // Make an API request to push the code to GitHub
     try {
@@ -156,8 +165,8 @@ pushCodeButton.addEventListener('click', async () => {
             body: JSON.stringify({
                 token,
                 repository,
-                filePath : folderInput.value,
-                content : outputRes.value
+                filePath, 
+                content 
             })
         });
 

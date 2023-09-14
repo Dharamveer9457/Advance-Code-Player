@@ -3,108 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
     <title>Code Player</title>
 </head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #fff;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+}
+
+.btn-github {
+    background-color: #24292e;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+</style>
 <body>
-    <div id="main-box">
-        <h1 style="text-align: center; color: white;">Code Player</h1>
-
-        <div id="buttons">
-            <select id="language">
-                <option value="">Convert code to</option>
-                <option value="Python">Python</option>
-                <option value="Java">Java</option>
-                <option value="Javascript">Javascript</option>
-            </select>
-            <button id="convert">Convert</button>
-            <button id="debug">Debug</button>
-            <button id="quality-check">Quality Check</button>
-            <button id="pushToGithub">Push Code to Github<i class="fab fa-github"></i></button>
-
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" id="closeModal">&times;</span>
-                    <h3>Select Repository and Commit Message</h3>
-                    <label for="repository">Select Repository:</label>
-                    <select id="repository">
-                        
-                    </select>
-                    <br><br>
-                    <label for="folder">Select Folder (optional):</label>
-                    <input type="text" id="folder" placeholder="Folder path">
-                    <br><br>
-                    <label for="commitMessage">Commit Message:</label>
-                    <input type="text" id="commitMessage" placeholder="Enter commit message">
-                    <br><br>
-                    <button id="pushCode">Push Code</button>
-                </div>
-            </div>
-
-        </div><br>
-        <div id="container">
-            <div id="writeCodeLang">
-                <!-- <div id="editor"></div> -->
-                <label for="languageSelect">Write a code in:</label>
-                    <select id="languageSelect">
-                        <option value="javascript">JavaScript</option>
-                        <option value="python">Python</option>
-                        <option value="java">Java</option>
-                    </select>
-            </div>
-            <div id="editor"></div>
-            <div class="output-container">
-                <pre id="converted-code">Output comes here...</pre>
-            </div>
-        </div>
-        <footer>Created by - Dharamveer😉</footer>
+    <div class="container">
+        <h1>Login with GitHub</h1>
+        <a href="http://localhost:3000/auth/github" class="btn-github">Login with GitHub</a>
     </div>
 </body>
-<script src="./script.js"></script>
-<!-- Include the Ace Editor JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
-
-<!-- Include the Ace Editor theme and mode (e.g., JavaScript) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/theme-monokai.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-javascript.js"></script>
-
-<script>
-    let editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai"); // Set the theme (you can choose other themes)
-    // editor.session.setMode("ace/mode/javascript");
-
-    function setEditorMode() {
-            var selectedLanguage = document.getElementById("languageSelect").value;
-            var mode = "ace/mode/" + selectedLanguage;
-            editor.session.setMode(mode);
-        }
-
-        // Set the initial language
-        setEditorMode();
-
-        // Listen for changes in the language selection
-        document.getElementById("languageSelect").addEventListener("change", setEditorMode);
-
-    var placeholderText = "//Write your code here...";
-
-        // Set the initial content to the placeholder
-        editor.setValue(placeholderText, 1);
-
-        // Handle editor focus and blur events
-        editor.on("focus", function() {
-            // Clear the placeholder text when the editor gains focus
-            if (editor.getValue() === placeholderText) {
-                editor.setValue("", 1);
-            }
-        });
-
-        editor.on("blur", function() {
-            // Restore the placeholder text when the editor loses focus and is empty
-            if (editor.getValue() === "") {
-                editor.setValue(placeholderText, 1);
-            }
-        });
-</script>
 </html>
