@@ -119,8 +119,12 @@ function qualityCheck(){
 
 async function populateRepositories() {
     try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      console.log(code);
+
         // Make a GET request to your /api/github-repositories endpoint
-        const response = await fetch('http://localhost:3000/getToken')
+        const response = await fetch(`http://localhost:3000/getToken?code=${code}`)
         // , {
         //     method: 'GET',
         //     headers: {

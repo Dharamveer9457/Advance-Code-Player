@@ -139,7 +139,8 @@ app.get('/getToken', async (req, res) => {
         // console.log(userProfile);
         // req.session.accessToken = accessToken;
         // Redirect the user to the desired page after successful authentication
-        res.redirect('http://localhost:3000/repositories');
+        // res.redirect('http://localhost:3000/repositories');
+        res.json({"accessToken":accessToken})
         // res.json({"token":accessToken, "msg":"User logged in successfully."});
     } catch (error) {
         console.error(error);
