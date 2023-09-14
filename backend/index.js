@@ -87,7 +87,7 @@ app.post('/quality', async (req, res) => {
     }
   })
 
-const callbackUrl = 'https://code-convertor-chi.vercel.app/';
+const callbackUrl = 'https://advance-code-player.vercel.app/';
 
 app.get('/auth/github', (req, res) => {
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.github_client_ID}&redirect_uri=${callbackUrl}`;
@@ -129,7 +129,8 @@ app.get('/auth/github/callback', async (req, res) => {
         // You can now use the user profile data as needed
         console.log(userProfile);
         // Redirect the user to the desired page after successful authentication
-        res.json({"token":accessToken, "msg":"User logged in successfully."});
+        res.redirect('/repositories');
+        // res.json({"token":accessToken, "msg":"User logged in successfully."});
     } catch (error) {
         console.error(error);
         res.status(500).send('Error occurred during authentication.');
@@ -155,6 +156,36 @@ app.post('/push-to-github', async (req, res) => {
   } catch (error) {
     console.error('GitHub push error:', error);
     res.status(500).json({ error: 'Failed to push code to GitHub.' });
+  }
+});
+
+
+app.get('/repositories', async (req, res) => {
+  // Check if the user is authenticated (you can use session or token validation here)
+  if (!req.session.accessToken) {
+    return res.status(401).send('Unauthorized');
+  }
+
+  try {
+    const accessToken = req.session.accessToken;
+
+    // Fetch the user's repositories from the GitHub API
+    const repositoriesResponse = await axios.get(
+      'https://api.github.com/user/repos',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const repositoriesData = repositoriesResponse.data;
+
+    // You can customize the response or render a template with the repository data
+    res.json(repositoriesData);
+  } catch (error) {
+    console.error('Error fetching repositories:', error.message);
+    res.status(500).send('Error fetching repositories');
   }
 });
 
