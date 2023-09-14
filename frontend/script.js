@@ -154,7 +154,7 @@ pushCodeButton.addEventListener('click', async () => {
     const repoName = repoNameInput.value;
     const fileName = fileNameInput.value;
     const commitMessage = commitMessageInput.value;
-    const code = codeTextarea.value;
+    const code = outputRes.innerHTML;
 
     try {
       // Make a POST request to your API endpoint
