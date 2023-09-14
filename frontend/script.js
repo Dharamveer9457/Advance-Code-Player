@@ -22,6 +22,7 @@ qualityBtn.addEventListener("click", qualityCheck);
 pushToGithubButton.addEventListener('click', () => {
     modal.style.display = 'block'; // Display the modal
     populateRepositories();
+    codeValueInput.innerHTML = outputRes.textContent;
 });
 
 // Event listener to close the modal
@@ -125,13 +126,7 @@ async function populateRepositories() {
 
         // Make a GET request to your /api/github-repositories endpoint
         const response = await fetch(`http://localhost:3000/getToken?code=${code}`)
-        // , {
-        //     method: 'GET',
-        //     headers: {
-        //       Accept: 'application/json',
-        //     },
-        //   });
-      
+
           if (response.ok) {
             const repositoriesData = await response.json();
             console.log(repositoriesData)
@@ -158,11 +153,10 @@ async function populateRepositories() {
 
 pushCodeButton.addEventListener('click', async () => {
     // const accessToken = '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'; // Replace with your GitHub access token
-    const repoName = repoNameInput.value;
+    const repoName = repositorySelect.value;
     const fileName = fileNameInput.value;
     const commitMessage = commitMessageInput.value;
-    const code = codeValueInput.value;
-    console.log(outputRes)
+    const code = codeValueInput.innerHTML;
     console.log(fileName, repoName, commitMessage, code)
 
     try {
