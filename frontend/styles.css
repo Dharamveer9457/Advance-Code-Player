@@ -1,0 +1,159 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url("./main.jpg");
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    height: 100vh;
+    overflow: hidden;
+}
+
+#buttons{
+    width: 70%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+#language, #languageSelect{
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border: 1px solid rgb(182, 182, 182);
+    border-radius: 5px;
+}
+
+h1 {
+    color: #333;
+    text-decoration: underline;
+}
+
+#buttons>button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#buttons>button:hover {
+    background-color: #0056b3;
+}
+
+.output-container {
+    width: 50%;
+}
+
+h2 {
+    color: #333;
+}
+
+#writeCodeLang>label{
+    color: white;
+}
+
+#writeCodeLang{
+    position: relative;
+    left: 40.5%;
+    height: 45px;
+    width: 140px;
+    background-color: black;
+}
+
+#writeCodeLang>select{
+    width: 100%;
+}
+
+
+#converted-code {
+    background-color: #f5f5f5;
+    white-space: pre-wrap;
+    height: 480px;
+    margin: 0;
+    padding: 10px;
+    font-size: 16px;
+    color: white;
+    position: relative;
+    right: 51px;
+    background-color: rgb(82, 81, 81);
+}
+
+#editor {
+    height: 450px;
+    position: relative;
+    top: 50px;
+    right: 50px;
+    width: 50%;
+    font-size: 16px;
+}
+
+#container{
+    display: flex;
+    width: 80%;
+    margin: auto;
+    gap: 2px;
+}
+
+footer{
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    margin-top: 2%;
+}
+
+
+#buttons>#pushToGithub{
+    background-color: black;
+    color: white;
+    height: 40px;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#buttons>#pushToGithub:hover{
+    background-color: white;
+    color: black;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.modal-content {
+    background-color: #fff;
+    width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.modal-content button{
+    margin-left: 40%;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-content button:hover{
+    color: black;
+    background-color: white;
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+}
