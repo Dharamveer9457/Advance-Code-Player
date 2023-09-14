@@ -4,7 +4,6 @@ const debugBtn = document.getElementById("debug");
 const qualityBtn = document.getElementById("quality-check");
 const outputRes = document.getElementById("converted-code");
 const selectLanguage = document.getElementById("language");
-const githubAuthButton = document.getElementById("github-auth");
 const repositorySelect = document.getElementById("repository");
 const pushToGithubButton = document.getElementById("pushToGithub");
 const modal = document.getElementById('myModal');
@@ -12,7 +11,7 @@ const closeModal = document.getElementById('closeModal');
 const pushCodeButton = document.getElementById('pushCodeButton');
 const fileNameInput = document.getElementById('fileName');
 const commitMessageInput = document.getElementById('commitMessage');
-const repoNameInput = document.getElementById('repoName');
+// const repoNameInput = document.getElementById('repoName');
 const codeValueInput = document.getElementById('code')
 
 convertBtn.addEventListener("click",convertCode);
@@ -121,7 +120,7 @@ function qualityCheck(){
 async function populateRepositories() {
     try {
         // Make a GET request to your /api/github-repositories endpoint
-        const response = await fetch('https://advance-code-player.onrender.com/repositories', {
+        const response = await fetch('http://localhost:3000/repositories', {
             method: 'GET',
             headers: {
               Accept: 'application/json',
@@ -152,17 +151,17 @@ async function populateRepositories() {
 }
 
 pushCodeButton.addEventListener('click', async () => {
-    const accessToken = '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'; // Replace with your GitHub access token
+    // const accessToken = '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'; // Replace with your GitHub access token
     const repoName = repoNameInput.value;
     const fileName = fileNameInput.value;
     const commitMessage = commitMessageInput.value;
     const code = codeValueInput.value;
-
+    console.log(outputRes)
     console.log(fileName, repoName, commitMessage, code)
 
     try {
       // Make a POST request to your API endpoint
-      const response = await fetch('https://advance-code-player.onrender.com/push-to-repo', {
+      const response = await fetch('http://localhost:3000/push-to-repo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

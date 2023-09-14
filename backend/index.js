@@ -9,12 +9,13 @@ const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fet
 const session = require('express-session');
 app.use(cors());
 app.use(express.json());
-app.use(session({
-  secret: 'code-convertor', // Replace with a strong, random secret
-  resave: false,
-  saveUninitialized: true,
-}));
+// app.use(session({
+//   secret: 'code-convertor', // Replace with a strong, random secret
+//   resave: false,
+//   saveUninitialized: true,
+// }));
 
+let accessToken = "";
 // Define an endpoint to generate quotes
 app.post('/convert', async (req, res) => {
     const { code, language } = req.body;
@@ -97,64 +98,53 @@ app.post('/quality', async (req, res) => {
 const callbackUrl = 'https://advance-code-player.vercel.app/home.html';
 
 app.get('/auth/github', (req, res) => {
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.github_client_ID}&redirect_uri=${callbackUrl}`;
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${callbackUrl}`;
     res.redirect(authUrl);
 });
 
 
 // GitHub callback handler
-app.get('/auth/github/callback', async (req, res) => {
-    // const code = req.query.code;
-    // const error = req.query.error; // Check for the 'error' query parameter
+app.get('/getToken', async (req, res) => {
+    const code = req.query.code;
+    const error = req.query.error; 
 
-    // if (error) {
-    //     // User denied access, handle the error as needed
-    //     return res.status(403).send('Access denied by the user.');
-    // }
-    // // Exchange the code for an access token
-    // try {
-    //     const tokenResponse = await axios.post('https://github.com/login/oauth/access_token', {
-    //         client_id: process.env.github_client_ID,
-    //         client_secret: process.env.github_client_secret,
-    //         code: code
-    //     }, {
-    //         headers: {
-    //             Accept: 'application/json'
-    //         }
-    //     });
+    if (error) {
+        return res.status(403).send('Access denied by the user.');
+    }
+    // Exchange the code for an access token
+    try {
+        const tokenResponse = await axios.post('https://github.com/login/oauth/access_token', {
+            client_id: process.env.CLIENT_ID,
+            client_secret: process.env.CLIENT_SECRET,
+            code: code
+        }, {
+            headers: {
+                Accept: 'application/json'
+            }
+        });
 
-    //     const accessToken = tokenResponse.data.access_token;
-    //     console.log(accessToken);
+         accessToken = tokenResponse.data.access_token;
+        // console.log(accessToken);
 
-    //     // Use the access token to fetch the user's GitHub profile
-    //     const userResponse = await axios.get('https://api.github.com/user', {
-    //         headers: {
-    //             Authorization: `Bearer ${accessToken}`
-    //         }
-    //     });
+        // Use the access token to fetch the user's GitHub profile
+        const userResponse = await axios.get('https://api.github.com/user', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
 
-    //     const userProfile = userResponse.data;
+        const userProfile = userResponse.data;
 
-    //     // You can now use the user profile data as needed
-    //     console.log(userProfile);
-    //     req.session.accessToken = accessToken;
-    //     // Redirect the user to the desired page after successful authentication
-    //     res.redirect('http://localhost:3000/repositories');
-    //     // res.json({"token":accessToken, "msg":"User logged in successfully."});
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).send('Error occurred during authentication.');
-    // }
-    const params = "?client_id=" + process.env.github_client_ID + "&client_secret=" + process.env.github_client_secret + "&code=" + req.query.code + "&scope=repo";
-    await fetch("https://github.com/login/oauth/access_token" + params, {
-        method: "POST",
-        headers: {
-            "Accept": "application/json"
-        }
-    }).then((res) => res.json()).then((data) => {
-      console.log(data)
-        res.json(data)
-    })
+        // You can now use the user profile data as needed
+        // console.log(userProfile);
+        // req.session.accessToken = accessToken;
+        // Redirect the user to the desired page after successful authentication
+        res.redirect('http://localhost:3000/repositories');
+        // res.json({"token":accessToken, "msg":"User logged in successfully."});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error occurred during authentication.');
+    }
 });
 
 
@@ -193,76 +183,13 @@ app.post('/push-to-repo', async (req, res) => {
 });
 
 
-// app.post('/push-to-repo', async(req,res)=>{
-//   const { accessToken, brandName, fileContent, fileName, owner, repo, commitMessage } = req.body;
-//   const octokit = new Octokit({
-//       auth: accessToken,
-//   });
-
-//   try {
-//       // Get the current commit SHA for the default branch
-//       const { data: branchData } = await octokit.repos.getBranch({
-//           owner,
-//           repo,
-//           branch: brandName, // Replace with your default branch name
-//       });
-
-//       // Get the latest commit on the branch
-//       const latestCommitSha = branchData.commit.sha;
-
-//       // Get the current tree of the latest commit
-//       const { data: treeData } = await octokit.git.getTree({
-//           owner,
-//           repo,
-//           tree_sha: latestCommitSha,
-//           recursive: true,
-//       });
-
-//       // Find the file if it already exists in the tree
-//       const file = treeData.tree.find((item) => item.path === fileName);
-
-//       if (file) {
-//           // If the file exists, update it
-//           await octokit.repos.createOrUpdateFileContents({
-//               owner,
-//               repo,
-//               path: fileName,
-//               message: `${commitMessage}`,
-//               content: Buffer.from(fileContent).toString("base64"),
-//               sha: file.sha,
-//               branch: brandName, // Replace with your default branch name
-//           });
-//       } else {
-//           // If the file doesn't exist, create it
-//           await octokit.repos.createOrUpdateFileContents({
-//               owner,
-//               repo,
-//               path: fileName,
-//               message: `${commitMessage}`,
-//               content: Buffer.from(fileContent).toString("base64"),
-//               branch: brandName, // Replace with your default branch name
-//           });
-//       }
-
-//       console.log(`File "${fileName}" created/updated successfully!`);
-//       res.json({ isSuccess: true })
-//   } catch (error) {
-//       console.error("Error:", error.message);
-//       res.status(501).json({ isSuccess: false })
-//   }
-// })
-
-
 app.get('/repositories', async (req, res) => {
-  // Check if the user is authenticated (you can use session or token validation here)
-  // console.log(req.session)
-  if (!req.session.accessToken) {
+
+  if (!accessToken) {
     return res.status(401).send('Unauthorized');
   }
 
   try {
-    const accessToken = req.session.accessToken;
-
     // Fetch the user's repositories from the GitHub API
     const repositoriesResponse = await axios.get(
       'https://api.github.com/user/repos',
@@ -274,16 +201,13 @@ app.get('/repositories', async (req, res) => {
     );
 
     const repositoriesData = repositoriesResponse.data;
-
-    // You can customize the response or render a template with the repository data
+    // console.log(repositoriesData)
     res.json(repositoriesData);
   } catch (error) {
     console.error('Error fetching repositories:', error.message);
     res.status(500).send('Error fetching repositories');
   }
 });
-
-
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

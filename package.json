@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "@octokit/auth-oauth-user": "^4.0.0"
-  }
-}
