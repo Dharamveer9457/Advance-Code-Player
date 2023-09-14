@@ -92,7 +92,7 @@ app.post('/quality', async (req, res) => {
     }
   })
 
-const callbackUrl = 'https://advance-code-player-igqis42g8-dharamveer9457.vercel.app/home.html';
+const callbackUrl = 'https://advance-code-player-8ag3au7k2-dharamveer9457.vercel.app/home.html';
 
 app.get('/auth/github', (req, res) => {
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.github_client_ID}&redirect_uri=${callbackUrl}`;
