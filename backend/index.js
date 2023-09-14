@@ -183,7 +183,7 @@ app.post('/push-to-repo', async (req, res) => {
 
 app.get('/repositories', async (req, res) => {
   // Check if the user is authenticated (you can use session or token validation here)
-  console.log(req.session)
+  // console.log(req.session)
   if (!req.session.accessToken) {
     return res.status(401).send('Unauthorized');
   }

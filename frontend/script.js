@@ -119,7 +119,7 @@ function qualityCheck(){
 async function populateRepositories() {
     try {
         // Make a GET request to your /api/github-repositories endpoint
-        const response = await fetch('http://localhost:3000/repositories', {
+        const response = await fetch('https://advance-code-player.onrender.com/repositories', {
             method: 'GET',
             headers: {
               Accept: 'application/json',
@@ -158,7 +158,7 @@ pushCodeButton.addEventListener('click', async () => {
 
     try {
       // Make a POST request to your API endpoint
-      const response = await fetch('/push-to-repo', {
+      const response = await fetch('https://advance-code-player.onrender.com/push-to-repo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
