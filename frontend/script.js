@@ -167,11 +167,11 @@ pushCodeButton.addEventListener('click', async () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          accessToken,
+          // accessToken,
           repoName,
           fileName,
           commitMessage,
-          code,
+          code
         }),
       });
 

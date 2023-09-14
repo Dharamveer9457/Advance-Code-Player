@@ -153,7 +153,7 @@ app.get('/getToken', async (req, res) => {
 app.post('/push-to-repo', async (req, res) => {
   try {
     // Extract data from the request body
-    const { accessToken, repoName, fileName, commitMessage, code } = req.body;
+    const { repoName, fileName, commitMessage, code } = req.body;
 
     // Define the GitHub API endpoint for creating a new file
     const apiUrl = `https://api.github.com/repos/${repoName}/contents/${fileName}`;
