@@ -150,36 +150,37 @@ async function populateRepositories() {
 }
 
 pushCodeButton.addEventListener('click', async () => {
-    // Retrieve input values
-    const repository = document.getElementById('repository').value;
-    const filePath = folderInput.value;
-    const content = outputRes.value;
+    const accessToken = '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'; // Replace with your GitHub access token
+    const repoName = repoNameInput.value;
+    const fileName = fileNameInput.value;
+    const commitMessage = commitMessageInput.value;
+    const code = codeTextarea.value;
 
-    // Make an API request to push the code to GitHub
     try {
-        const response = await fetch('http://localhost:3000/push-to-github', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                token,
-                repository,
-                filePath, 
-                content 
-            })
-        });
+      // Make a POST request to your API endpoint
+      const response = await fetch('/push-to-repo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          accessToken,
+          repoName,
+          fileName,
+          commitMessage,
+          code,
+        }),
+      });
 
-        if (response.ok) {
-            alert('Code pushed to GitHub successfully!');
-        } else {
-            alert('Error pushing code to GitHub.');
-        }
+      if (response.ok) {
+        alert('Code pushed to GitHub successfully!');
+        modal.style.display = 'none';
+      } else {
+        const responseData = await response.json();
+        alert(`Error: ${responseData.message}`);
+      }
     } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred.');
+      console.error('Error pushing code to GitHub:', error.message);
+      alert('An error occurred while pushing code to GitHub.');
     }
-
-    // Close the modal after pushing the code
-    modal.style.display = 'none';
-});
+  });

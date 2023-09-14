@@ -27,19 +27,20 @@
             <div id="myModal" class="modal">
                 <div class="modal-content">
                     <span class="close" id="closeModal">&times;</span>
-                    <h3>Select Repository and Commit Message</h3>
-                    <label for="repository">Select Repository:</label>
-                    <select id="repository">
-                        <!-- <option value="Repo1">Repo1</option> -->
-                    </select>
+                    <h3>Push Code to GitHub</h3>
+                    <label for="repoName">Repository Name:</label>
+                    <input type="text" id="repoName" placeholder="Repository Name">
                     <br><br>
-                    <label for="folder">Select Folder (optional):</label>
-                    <input type="text" id="folder" placeholder="Folder path">
+                    <label for="fileName">File Name:</label>
+                    <input type="text" id="fileName" placeholder="File Name">
                     <br><br>
                     <label for="commitMessage">Commit Message:</label>
-                    <input type="text" id="commitMessage" placeholder="Enter commit message">
+                    <input type="text" id="commitMessage" placeholder="Commit Message">
                     <br><br>
-                    <button id="pushCode">Push Code</button>
+                    <label for="code">Code:</label>
+                    <textarea id="code" rows="6" placeholder="Enter your code here"></textarea>
+                    <br><br>
+                    <button id="pushCodeButton">Push Code</button>
                 </div>
             </div>
 

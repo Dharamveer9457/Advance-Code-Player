@@ -146,25 +146,38 @@ app.get('/auth/github/callback', async (req, res) => {
     }
 });
 
+
 // Define an endpoint to push code to GitHub
-app.post('/push-to-github', async (req, res) => {
-  const { token, repository, filePath, content } = req.body;
-
-  const octokit = new Octokit({ auth: token });
-
+app.post('/push-to-repo', async (req, res) => {
   try {
-    const response = await octokit.repos.createOrUpdateFileContents({
-      owner: repository.owner,
-      repo: repository.name,
-      path: filePath,
-      message: "Auto-generated code",
-      content: Buffer.from(content).toString('base64'),
-    });
+    // Extract data from the request body
+    const { accessToken, repoName, fileName, commitMessage, code } = req.body;
 
-    res.json({ success: true, data: response.data });
+    // Define the GitHub API endpoint for creating a new file
+    const apiUrl = `https://api.github.com/repos/${repoName}/contents/${fileName}`;
+
+    // Construct the request payload
+    const requestData = {
+      message: commitMessage,
+      content: Buffer.from(code).toString('base64'), // Convert code to base64
+    };
+
+    // Set the authorization header with the GitHub access token
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    // Make a PUT request to create or update the file in the repository
+    const response = await axios.put(apiUrl, requestData, { headers });
+
+    if (response.status === 201) {
+      res.status(201).json({ message: 'File created successfully!' });
+    } else {
+      res.status(response.status).json({ message: 'Failed to create file.' });
+    }
   } catch (error) {
-    console.error('GitHub push error:', error);
-    res.status(500).json({ error: 'Failed to push code to GitHub.' });
+    console.error('Error pushing code to repository:', error.message);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 });
 
