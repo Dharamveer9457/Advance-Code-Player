@@ -162,19 +162,19 @@ pushCodeButton.addEventListener('click', async () => {
     console.log(access_token)
     const accessToken = access_token
 
+    console.log({
+      repo, path, commitMessage, content
+    })
+
     try {
       // Make a POST request to your API endpoint
       const response = await fetch('http://localhost:3000/push-to-repo', {
-        method: 'POST',
+        method: 'put',
         headers: {
           'Content-Type': 'application/json',
-          'accessToken':accessToken
         },
         body: JSON.stringify({
-          repo,
-          path,
-          commitMessage,
-          content
+          repo, path, commitMessage, content
         }),
       });
 
