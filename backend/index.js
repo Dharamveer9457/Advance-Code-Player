@@ -152,6 +152,7 @@ app.get('/auth/github/callback', async (req, res) => {
             "Accept": "application/json"
         }
     }).then((res) => res.json()).then((data) => {
+      console.log(data)
         res.json(data)
     })
 });
