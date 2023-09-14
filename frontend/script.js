@@ -164,9 +164,9 @@ pushCodeButton.addEventListener('click', async () => {
     console.log(access_token)
     const accessToken = access_token
 
-    console.log({
-      repo, fileName, commitMessage, fileContent, branchName
-    })
+    // console.log({
+    //   repo, fileName, commitMessage, fileContent, branchName
+    // })
 
     try {
       // Make a POST request to your API endpoint
