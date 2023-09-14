@@ -157,7 +157,7 @@ pushCodeButton.addEventListener('click', async () => {
 
     // Make an API request to push the code to GitHub
     try {
-        const response = await fetch('/push-to-github', {
+        const response = await fetch('http://localhost:3000/push-to-github', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

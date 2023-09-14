@@ -123,6 +123,7 @@ app.get('/auth/github/callback', async (req, res) => {
         });
 
         const accessToken = tokenResponse.data.access_token;
+        console.log(accessToken);
 
         // Use the access token to fetch the user's GitHub profile
         const userResponse = await axios.get('https://api.github.com/user', {
