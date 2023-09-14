@@ -10,6 +10,7 @@ const modal = document.getElementById('myModal');
 const closeModal = document.getElementById('closeModal');
 const pushCodeButton = document.getElementById('pushCodeButton');
 const fileNameInput = document.getElementById('fileName');
+const branchNameInput = document.getElementById('branchName');
 const commitMessageInput = document.getElementById('commitMessage');
 // const repoNameInput = document.getElementById('repoName');
 const codeValueInput = document.getElementById('code')
@@ -155,26 +156,27 @@ async function populateRepositories() {
 pushCodeButton.addEventListener('click', async () => {
     // const accessToken = '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'; // Replace with your GitHub access token
     const repo = repositorySelect.value;
-    const path = fileNameInput.value;
+    const fileName = fileNameInput.value;
     const commitMessage = commitMessageInput.value;
-    const content = codeValueInput.innerHTML;
+    const fileContent = codeValueInput.value;
+    const branchName = branchNameInput.value;
     const access_token = localStorage.getItem('accessToken');
     console.log(access_token)
     const accessToken = access_token
 
     console.log({
-      repo, path, commitMessage, content
+      repo, fileName, commitMessage, fileContent, branchName
     })
 
     try {
       // Make a POST request to your API endpoint
       const response = await fetch('http://localhost:3000/push-to-repo', {
-        method: 'put',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          repo, path, commitMessage, content
+          accessToken, repo, branchName, fileName, commitMessage, fileContent
         }),
       });
 
