@@ -120,15 +120,17 @@ function qualityCheck(){
 async function populateRepositories() {
     try {
         // Make a GET request to your /api/github-repositories endpoint
-        const response = await fetch('http://localhost:3000/repositories', {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-            },
-          });
+        const response = await fetch('http://localhost:3000/getToken')
+        // , {
+        //     method: 'GET',
+        //     headers: {
+        //       Accept: 'application/json',
+        //     },
+        //   });
       
           if (response.ok) {
             const repositoriesData = await response.json();
+            console.log(repositoriesData)
             // const repositorySelect = document.getElementById('repository');
             repositorySelect.innerHTML = ''; // Clear existing options
       
