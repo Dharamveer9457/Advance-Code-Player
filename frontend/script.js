@@ -12,7 +12,8 @@ const closeModal = document.getElementById('closeModal');
 const pushCodeButton = document.getElementById('pushCodeButton');
 const fileNameInput = document.getElementById('fileName');
 const commitMessageInput = document.getElementById('commitMessage');
-const repoNameInput = document.getElementById('repoName')
+const repoNameInput = document.getElementById('repoName');
+const codeValueInput = document.getElementById('code')
 
 convertBtn.addEventListener("click",convertCode);
 debugBtn.addEventListener("click", debugCode);
@@ -155,7 +156,9 @@ pushCodeButton.addEventListener('click', async () => {
     const repoName = repoNameInput.value;
     const fileName = fileNameInput.value;
     const commitMessage = commitMessageInput.value;
-    const code = outputRes.textContent;
+    const code = codeValueInput.value;
+
+    console.log(fileName, repoName, commitMessage, code)
 
     try {
       // Make a POST request to your API endpoint
