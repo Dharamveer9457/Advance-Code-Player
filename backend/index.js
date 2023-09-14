@@ -204,15 +204,16 @@ app.get('/repositories', async (req, res) => {
 
 app.post("/push-to-repo", async(req,res)=>{
     try {
-      const access_Token = req.session.accessToken;
+      // const access_Token = req.session.accessToken;
       const userResponse = await axios.get('https://api.github.com/user', {
       headers: {
-        Authorization: `Bearer ${access_Token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
     const ownerUsername = userResponse.data.login;
-    const {repo, path, message, content} = req.body;
+    console.log(ownerUsername)
+    const {repo, path, commitMessage, content} = req.body;
     const base64EncodedContent = Buffer.from(content).toString('base64');
 
     // Create or update the file in the repository
@@ -220,7 +221,7 @@ app.post("/push-to-repo", async(req,res)=>{
       method: 'POST', // Use 'put' to update an existing file, or 'post' to create a new file
       url: `https://api.github.com/repos/${ownerUsername}/${repo}/contents/${path}`,
       headers: {
-        Authorization: `Bearer ${access_Token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       data: {
         message: commitMessage,
